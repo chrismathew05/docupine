@@ -1,4 +1,4 @@
-import { Download, Code, Inbox, CreditCard, SquarePen } from "lucide-react";
+import { sidebarItems } from "@/lib/actions";
 
 import Image from "next/image";
 import Link from "next/link";
@@ -13,35 +13,6 @@ import {
   SidebarMenuItem,
   SidebarHeader,
 } from "@/components/ui/sidebar";
-
-// Menu items.
-const items = [
-  {
-    title: "Create Job",
-    url: "#",
-    icon: SquarePen,
-  },
-  {
-    title: "Jobs",
-    url: "#",
-    icon: Inbox,
-  },
-  {
-    title: "Saved Flows",
-    url: "#",
-    icon: Download,
-  },
-  {
-    title: "Billing",
-    url: "#",
-    icon: CreditCard,
-  },
-  {
-    title: "Developer",
-    url: "#",
-    icon: Code,
-  },
-];
 
 export function AppSidebar() {
   return (
@@ -68,13 +39,13 @@ export function AppSidebar() {
         <SidebarGroup>
           <SidebarGroupContent>
             <SidebarMenu>
-              {items.map((item) => (
+              {sidebarItems.map((item) => (
                 <SidebarMenuItem key={item.title}>
                   <SidebarMenuButton asChild>
-                    <a href={item.url}>
+                    <Link href={item.url}>
                       <item.icon />
                       <span>{item.title}</span>
-                    </a>
+                    </Link>
                   </SidebarMenuButton>
                 </SidebarMenuItem>
               ))}
