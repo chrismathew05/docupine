@@ -1,4 +1,4 @@
-import { sidebarItems } from "@/lib/actions";
+import { sidebarItems } from "@/lib/definitions";
 
 import Image from "next/image";
 import Link from "next/link";
@@ -14,6 +14,7 @@ import {
   SidebarHeader,
 } from "@/components/ui/sidebar";
 
+// Renders sidebar nav with app logo + menu items
 export function AppSidebar() {
   return (
     <Sidebar variant="inset">

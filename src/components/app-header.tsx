@@ -1,23 +1,24 @@
 "use client";
 
 import { UserButton } from "@clerk/nextjs";
-import { sidebarItems } from "@/lib/actions";
+import { sidebarItems } from "@/lib/definitions";
 import { useEffect, useState } from "react";
 
 import { Separator } from "@/components/ui/separator";
 import { SidebarTrigger } from "@/components/ui/sidebar";
 import { usePathname } from "next/navigation";
 
+// Displays sidebar trigger button, current page title, user auth
 export function AppHeader() {
   const pathname = usePathname();
   const [mounted, setMounted] = useState(false);
 
-  // Only show UserButton after client-side hydration is complete
+  // Only show Clerk UserButton after client-side hydration is complete
   useEffect(() => {
     setMounted(true);
   }, []);
 
-  // Find the title that matches the current pathname
+  // Finds title that matches current url - used to populate page title in header
   const currentPageTitle =
     sidebarItems.find((item) => item.url === pathname)?.title || "Home";
 

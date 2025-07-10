@@ -22,50 +22,47 @@ export default function Developer() {
       <h1>API Key</h1>
       <p>
         An API key can be used to access the Docupine API. See the{" "}
-        <a href="google.ca" className="text-blue-500 hover:underline">
+        <a
+          href="google.ca"
+          className="text-blue-500 hover:underline"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
           docs
         </a>{" "}
         for more information.
       </p>
 
-      {apiKey ? (
-        <Card className="p-4">
-          <div className="space-y-2">
-            <div className="flex items-center justify-between">
-              <h3 className="font-medium">
-                {showApiKey ? apiKey : "••••••••••••••••"}
-              </h3>
-              <div className="flex gap-2">
-                <Button
-                  className="bg-black"
-                  variant="secondary"
-                  size="sm"
-                  onClick={() => setShowApiKey(!showApiKey)}
-                >
-                  {showApiKey ? (
-                    <EyeOffIcon className="h-4 w-4 mr-1" />
-                  ) : (
-                    <EyeIcon className="h-4 w-4 mr-1" />
-                  )}
-                  {showApiKey ? "Hide" : "Reveal"}
-                </Button>
-                <Button
-                  variant="destructive"
-                  size="sm"
-                  onClick={handleDeleteApiKey}
-                >
-                  <TrashIcon className="h-4 w-4 mr-1" />
-                  Delete
-                </Button>
-              </div>
-            </div>
+      <Card className="p-4">
+        <div className="flex justify-between">
+          <p className="font-medium">
+            {showApiKey ? apiKey : "••••••••••••••••"}
+          </p>
+          <div className="flex gap-2">
+            <Button
+              className="bg-black"
+              variant="secondary"
+              size="sm"
+              onClick={() => setShowApiKey(!showApiKey)}
+            >
+              {showApiKey ? (
+                <EyeOffIcon className="h-4 w-4 mr-1" />
+              ) : (
+                <EyeIcon className="h-4 w-4 mr-1" />
+              )}
+              {showApiKey ? "Hide" : "Reveal"}
+            </Button>
+            <Button
+              variant="destructive"
+              size="sm"
+              onClick={handleDeleteApiKey}
+            >
+              <TrashIcon className="h-4 w-4 mr-1" />
+              Delete
+            </Button>
           </div>
-        </Card>
-      ) : (
-        <Button className="mt-2" onClick={handleGenerateApiKey}>
-          Generate API Key
-        </Button>
-      )}
+        </div>
+      </Card>
     </div>
   );
 }
