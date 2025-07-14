@@ -1,6 +1,5 @@
-import { Button } from "@/components/ui/button";
-
 import KeyDisplay from "@/components/key-display";
+import RegenKey from "@/components/regen-key";
 import { getUserApiKey, createUserApiKey } from "@/lib/actions";
 
 // Developer page to display/regenerate API key
@@ -24,10 +23,7 @@ export default async function Developer() {
       </p>
 
       <KeyDisplay apiKey={apiKey} />
-
-      <form action={createUserApiKey}>
-        <Button type="submit">Regenerate API Key</Button>
-      </form>
+      <RegenKey createUserApiKeyAction={createUserApiKey} />
     </div>
   );
 }
