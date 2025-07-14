@@ -1,21 +1,11 @@
-"use client";
-
-import { useState } from "react";
-import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { EyeIcon, EyeOffIcon, TrashIcon } from "lucide-react";
 
-export default function Developer() {
-  const [apiKey, setApiKey] = useState("abcxyz");
-  const [showApiKey, setShowApiKey] = useState(false);
+import KeyDisplay from "@/components/key-display";
+import { getUserApiKey, createUserApiKey } from "@/lib/actions";
 
-  const handleGenerateApiKey = () => {
-    setApiKey("550e8400-e29b-41d4-a716-446655440000");
-  };
-
-  const handleDeleteApiKey = () => {
-    setApiKey("");
-  };
+// Developer page to display/regenerate API key
+export default async function Developer() {
+  const apiKey = await getUserApiKey();
 
   return (
     <div className="space-y-4">
@@ -23,7 +13,7 @@ export default function Developer() {
       <p>
         An API key can be used to access the Docupine API. See the{" "}
         <a
-          href="google.ca"
+          href="https://google.ca"
           className="text-blue-500 hover:underline"
           target="_blank"
           rel="noopener noreferrer"
@@ -33,36 +23,11 @@ export default function Developer() {
         for more information.
       </p>
 
-      <Card className="p-4">
-        <div className="flex justify-between">
-          <p className="font-medium">
-            {showApiKey ? apiKey : "••••••••••••••••"}
-          </p>
-          <div className="flex gap-2">
-            <Button
-              className="bg-black"
-              variant="secondary"
-              size="sm"
-              onClick={() => setShowApiKey(!showApiKey)}
-            >
-              {showApiKey ? (
-                <EyeOffIcon className="h-4 w-4 mr-1" />
-              ) : (
-                <EyeIcon className="h-4 w-4 mr-1" />
-              )}
-              {showApiKey ? "Hide" : "Reveal"}
-            </Button>
-            <Button
-              variant="destructive"
-              size="sm"
-              onClick={handleDeleteApiKey}
-            >
-              <TrashIcon className="h-4 w-4 mr-1" />
-              Delete
-            </Button>
-          </div>
-        </div>
-      </Card>
+      <KeyDisplay apiKey={apiKey} />
+
+      <form action={createUserApiKey}>
+        <Button type="submit">Regenerate API Key</Button>
+      </form>
     </div>
   );
 }
