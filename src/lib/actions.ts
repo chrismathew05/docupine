@@ -11,6 +11,7 @@ import {
   DynamoDBDocumentClient,
   GetCommand,
   PutCommand,
+  DeleteCommand,
 } from "@aws-sdk/lib-dynamodb";
 import { revalidatePath } from "next/cache";
 
@@ -29,7 +30,7 @@ export async function getUserApiKey(): Promise<string | null> {
 
   try {
     const command = new GetCommand({
-      TableName: process.env.AWS_DYNAMO_TABLE,
+      TableName: process.env.AWS_DYNAMO_USERS_TABLE,
       Key: { userId },
       ProjectionExpression: "apiKey", // GSI
     });
@@ -54,7 +55,7 @@ export async function createUserApiKey(): Promise<string | null> {
   const apiKey = crypto.randomUUID();
 
   const command = new PutCommand({
-    TableName: process.env.AWS_DYNAMO_TABLE,
+    TableName: process.env.AWS_DYNAMO_USERS_TABLE,
     Item: {
       userId: userId,
       apiKey: apiKey,
@@ -71,6 +72,28 @@ export async function createUserApiKey(): Promise<string | null> {
   revalidatePath("/developer");
 
   return apiKey;
+}
+
+/**
+ * Deletes entire Item in Dynamo table for currently authenticated user.
+ * Only called upon user deletion + signed out of app.
+ *
+ * @throws {Error} if user is not authenticated or AWS/DB error
+ */
+export async function deleteUser(): Promise<void> {
+  const userId = await checkAuth();
+
+  try {
+    const command = new DeleteCommand({
+      TableName: process.env.AWS_DYNAMO_USERS_TABLE,
+      Key: { userId },
+    });
+
+    await docClient.send(command);
+  } catch (error) {
+    console.error("Error deleting user data:", error);
+    throw new Error("Failed to delete user data.");
+  }
 }
 
 // HELPERS
