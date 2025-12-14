@@ -14,7 +14,7 @@ import { toast } from "sonner";
 import { EyeIcon, EyeOffIcon, Copy } from "lucide-react";
 
 interface KeyDisplayProps {
-  apiKey: string | null;
+  apiKey: string;
 }
 
 // Component to hide/reveal + copy api key
@@ -49,15 +49,12 @@ export default function KeyDisplay({ apiKey }: KeyDisplayProps) {
             <TooltipTrigger asChild>
               <Button
                 onClick={() => {
-                  if (apiKey) {
-                    navigator.clipboard.writeText(apiKey);
-                    toast("API key copied to clipboard");
-                  }
+                  navigator.clipboard.writeText(apiKey);
+                  toast("API key copied to clipboard");
                 }}
                 className="bg-black"
                 variant="secondary"
                 size="sm"
-                disabled={!apiKey}
               >
                 <Copy size={16} />
               </Button>
