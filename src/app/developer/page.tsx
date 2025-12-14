@@ -4,7 +4,7 @@ import { getUserApiKey, createUserApiKey } from "@/lib/actions";
 
 // Developer page to display/regenerate API key
 export default async function Developer() {
-  const apiKey = await getUserApiKey();
+  const apiKey = (await getUserApiKey()) ?? "Waiting for key generation...";
 
   return (
     <div className="space-y-4">

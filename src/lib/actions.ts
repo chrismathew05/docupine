@@ -36,7 +36,7 @@ export async function getUserApiKey(): Promise<string | null> {
     });
 
     const { Item } = await docClient.send(command);
-    return Item?.apiKey ?? createUserApiKey();
+    return Item?.apiKey ?? (await _createApiKey(userId));
   } catch (error) {
     console.error("Error fetching API key:", error);
     throw new Error("Failed to retrieve API key.");
@@ -45,13 +45,25 @@ export async function getUserApiKey(): Promise<string | null> {
 
 /**
  * Creates/updates API key in Dynamo table for currently authenticated user.
+ * This function is intended to be called from a client action and will revalidate the path.
  *
  * @returns Newly created API key
  * @throws {Error} if user is not authenticated or AWS/DB error
  */
 export async function createUserApiKey(): Promise<string | null> {
   const userId = await checkAuth();
+  const apiKey = await _createApiKey(userId);
+  revalidatePath("/developer");
+  return apiKey;
+}
 
+/**
+ * Internal function to create an API key for a user.
+ * Does not perform cache revalidation.
+ * @param userId The ID of the user to create the key for.
+ * @returns The newly created API key.
+ */
+async function _createApiKey(userId: string | null): Promise<string> {
   const apiKey = crypto.randomUUID();
 
   const command = new PutCommand({
@@ -64,14 +76,11 @@ export async function createUserApiKey(): Promise<string | null> {
 
   try {
     await docClient.send(command);
+    return apiKey;
   } catch (error) {
     console.error("Error creating API key:", error);
     throw new Error("Failed to create API key.");
   }
-
-  revalidatePath("/developer");
-
-  return apiKey;
 }
 
 /**
